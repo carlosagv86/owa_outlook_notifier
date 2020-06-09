@@ -1,10 +1,23 @@
+// ==UserScript==
+// @name         OWA - Outlook Notifier
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       @carlosagv86
+// @match        https://mail.diebold.com/owa/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
 function getElementFromXPath(xpath, doc) {
     return document.evaluate(xpath, doc, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 }
 
+var xpath_messages_list = '//div[contains(@tempid,"emailslistviewpanel")]';
+
 function get_unread_messages() {
-    localStorage.setItem('messages_read', JSON.stringify([]));
-    var xpath_messages_list = '//div[contains(@tempid,"emailslistviewpanel")]';
     var clist = getElementFromXPath(xpath_messages_list, document);
 
     if (clist) {
@@ -18,7 +31,7 @@ function get_unread_messages() {
                         var preview = getElementFromXPath('div[1]/div[5]/div[1]/span[1]', clist.childNodes[i]).innerText;
 
                         console.log(from, subject, preview);
-                        
+
                         var messages_read = localStorage.getItem('messages_read');
                         if(messages_read) {
                             messages_read = JSON.parse(messages_read.split(','));
@@ -49,4 +62,7 @@ function get_unread_messages() {
         }
     }
 }
+localStorage.setItem('messages_read', JSON.stringify([]));
 var check_mails = setInterval(get_unread_messages, 2500);
+
+})();
