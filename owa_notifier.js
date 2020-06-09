@@ -2,9 +2,9 @@ function getElementFromXPath(xpath, doc) {
     return document.evaluate(xpath, doc, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 }
 
-var xpath_messages_list = '//div[contains(@tempid,"emailslistviewpanel")]';
-
 function get_unread_messages() {
+    localStorage.setItem('messages_read', JSON.stringify([]));
+    var xpath_messages_list = '//div[contains(@tempid,"emailslistviewpanel")]';
     var clist = getElementFromXPath(xpath_messages_list, document);
 
     if (clist) {
@@ -49,7 +49,4 @@ function get_unread_messages() {
         }
     }
 }
-
-localStorage.setItem('messages_read', JSON.stringify([]));
-
 var check_mails = setInterval(get_unread_messages, 2500);
