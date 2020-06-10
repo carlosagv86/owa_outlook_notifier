@@ -15,9 +15,9 @@ function getElementFromXPath(xpath, doc) {
     return document.evaluate(xpath, doc, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 }
 
-var xpath_messages_list = '//div[contains(@tempid,"emailslistviewpanel")]';
 
 function get_unread_messages() {
+    var xpath_messages_list = '//div[contains(@tempid,"emailslistviewpanel")]';
     var clist = getElementFromXPath(xpath_messages_list, document);
 
     if (clist) {
@@ -30,7 +30,7 @@ function get_unread_messages() {
                         var subject = getElementFromXPath('div[1]/div[4]/div[2]/span[3]', clist.childNodes[i]).innerText;
                         var preview = getElementFromXPath('div[1]/div[5]/div[1]/span[1]', clist.childNodes[i]).innerText;
 
-                        console.log(from, subject, preview);
+                        //console.log(from, subject, preview);
 
                         var messages_read = localStorage.getItem('messages_read');
                         if(messages_read) {
@@ -38,24 +38,24 @@ function get_unread_messages() {
                             if(messages_read.includes(subject)) {
                                 continue;
                             }
-
-                            if(!messages_read) {
-                                messages_read = []
-                            }
-
-                            var options = {
-                                body: subject + ': ' + preview,
-                                icon: document.querySelector('link[rel="shortcut icon"]').href,
-                                requireInteraction: true
-                            };
-                            var notification = new Notification(from, options);
-                            notification.onclick = function() {
-                                window.focus();
-                            };
-
-                            messages_read.push(subject);
-                            localStorage.setItem('messages_read', JSON.stringify(messages_read));
                         }
+
+                        if(!messages_read) {
+                            messages_read = []
+                        }
+
+                        var options = {
+                            body: subject + ': ' + preview,
+                            icon: document.querySelector('link[rel="shortcut icon"]').href,
+                            requireInteraction: true
+                        };
+                        var notification = new Notification(from, options);
+                        notification.onclick = function() {
+                            window.focus();
+                        };
+
+                        messages_read.push(subject);
+                        localStorage.setItem('messages_read', JSON.stringify(messages_read));
                     }
                 }
             }
