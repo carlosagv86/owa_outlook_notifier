@@ -56,7 +56,7 @@ function get_unread_messages() {
                         messages_read.push(subject);
                         localStorage.setItem('messages_read', JSON.stringify(messages_read));
 
-                        console.log('new message: ' + from, subject, preview);
+                        //console.log('new message: ' + from, subject, preview);
                     }
                 }
             }
