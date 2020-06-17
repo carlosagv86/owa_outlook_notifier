@@ -30,7 +30,6 @@ function get_unread_messages() {
                         var subject = getElementFromXPath('div[1]/div[4]/div[2]/span[3]', clist.childNodes[i]).innerText;
                         var preview = getElementFromXPath('div[1]/div[5]/div[1]/span[1]', clist.childNodes[i]).innerText;
 
-                        //console.log(from, subject, preview);
 
                         var messages_read = localStorage.getItem('messages_read');
                         if(messages_read) {
@@ -56,13 +55,28 @@ function get_unread_messages() {
 
                         messages_read.push(subject);
                         localStorage.setItem('messages_read', JSON.stringify(messages_read));
+
+                        console.log('new message: ' + from, subject, preview);
                     }
                 }
             }
         }
     }
 }
-localStorage.setItem('messages_read', JSON.stringify([]));
-var check_mails = setInterval(get_unread_messages, 2500);
+function init() {
+    if (!Notification) {
+        alert('Desktop notifications not available in your browser. Try Chromium.');
+        return;
+    }
+
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
+
+    localStorage.setItem('messages_read', JSON.stringify([]));
+    var check_mails = setInterval(get_unread_messages, 2500);
+}
+
+init();
 
 })();
